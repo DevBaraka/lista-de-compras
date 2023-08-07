@@ -41,12 +41,3 @@ h3 {
 h4 {
     opacity: 50%;
 }
-
-@media (max-width: 375px) {
-    body {
-        margin: 5px;
-    }
-    .item-name {
-        width: 150px;
-    }
-}

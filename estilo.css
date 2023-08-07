@@ -45,4 +45,7 @@ h4 {
     .item-price {
       width: 10%;
     }
+    .item-quantity {
+        width: 40px;
+      }
   }

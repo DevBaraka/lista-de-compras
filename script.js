@@ -14,7 +14,7 @@ function clicou() {
         let priceInput = document.createElement('input');
         priceInput.type = 'number';
         priceInput.className = 'item-price';
-        priceInput.placeholder = 'Preço do item';
+        priceInput.placeholder = 'Preço';
 
         let checkbox = document.createElement('input');
         checkbox.type = 'checkbox';

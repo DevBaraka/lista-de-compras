@@ -38,9 +38,7 @@ function clicou() {
         });
 
         itemName.value = '';
-    } else {
-        window.alert('Você nao preencheu os campos corretamente!')
-    }
+    } 
 }
 
     function calculateTotal() {

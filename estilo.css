@@ -17,9 +17,9 @@ h1 {
 input {
     margin: 5px;
 }
-.item-preco {
-    width: 60px;
-}
+.item-price {
+    width: 60px; /* Ajuste o tamanho conforme necessário */
+  }
 button {
     height: 20px;
     border-radius: 5px;

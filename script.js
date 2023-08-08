@@ -1,5 +1,6 @@
 let totalValueInput = document.querySelector(".totalValue");
 let totalValue = 0;
+let totalGastarInput = document.querySelector('.totalGastar');
 
 
 function clicou() {
@@ -54,7 +55,7 @@ function clicou() {
         let priceInputs = document.querySelectorAll('.item-price');
         let quantityInputs = document.querySelectorAll('.item-quantity');
         let checkboxes = document.querySelectorAll('.item-checkbox');
-    
+
         for (let i = 0; i < priceInputs.length; i++) {
         let itemPriceValue = parseFloat(priceInputs[i].value);
         let itemQuantityValue = parseFloat(quantityInputs[i].value);
@@ -64,7 +65,22 @@ function clicou() {
             totalValue += itemPriceValue * itemQuantityValue;
             }
         }
-        }
-    
+        
+        
+      }
         totalValueInput.value = totalValue.toFixed(2);
+        gastoTotal();
+    
+    }
+    function gastoTotal() {
+      let valePrice = parseFloat(totalGastarInput.value);
+      let result = valePrice - totalValue;
+      
+      // Define um valor mínimo de 0 para o resultado
+      result = Math.max(result, 0);
+      
+      console.log(result);
+
+      totalGastarInput.value = result;
+              
     }

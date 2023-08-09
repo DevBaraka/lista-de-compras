@@ -4,51 +4,55 @@ let totalGastarInput = document.querySelector('.totalGastar');
 let listaDeCompras = [];
 
 function clicou() {
-    let itemName = document.querySelector('.item-name');
-    let itemList = document.querySelector('.item-List')
+  let itemName = document.querySelector('.item-name');
+  let itemList = document.querySelector('.item-List')
 
-    let newItemText = itemName.value;
+  let newItemText = itemName.value;
 
-    if (newItemText !== '') {
-        let newItem = document.createElement('li');
+  if (newItemText !== '') {
+    let newItem = document.createElement('li');
+    newItem.classList.add('no-list-marker');
 
-        let priceInput = document.createElement('input');
-        priceInput.type = 'number';
-        priceInput.className = 'item-price';
-        priceInput.placeholder = 'Preço';
+    let checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'item-checkbox';
+    
+    let itemNameSpan = document.createElement('span');
+    itemNameSpan.textContent = newItemText;
+    itemNameSpan.classList.add('no-text-decoration');
 
-        let quantityInput = document.createElement('input');
-        quantityInput.type = 'number';
-        quantityInput.className = 'item-quantity';
-        quantityInput.placeholder = 'Und';
+    let priceInput = document.createElement('input');
+    priceInput.type = 'number';
+    priceInput.className = 'item-price';
+    priceInput.placeholder = 'Preço';
 
-        let checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.className = 'item-checkbox';
+    let quantityInput = document.createElement('input');
+    quantityInput.type = 'number';
+    quantityInput.className = 'item-quantity';
+    quantityInput.placeholder = 'Und';
+    quantityInput.size = 2;
 
-        newItem.textContent = newItemText + ' - Preço: R$:';
-        itemList.appendChild(newItem);
+    newItem.appendChild(checkbox);
+    newItem.appendChild(itemNameSpan);
+    newItem.appendChild(priceInput);
+    newItem.appendChild(quantityInput);
 
-        newItem.appendChild(checkbox);
-        itemList.appendChild(newItem);
-        newItem.appendChild(priceInput);
-        newItem.appendChild(quantityInput);
+    itemList.appendChild(newItem);
 
-        priceInput.addEventListener('input', function() {
-            calculateTotal();
-          });
-      
-          quantityInput.addEventListener('input', function() {
-            calculateTotal();
-          });
-      
-          checkbox.addEventListener('change', function() {
-            calculateTotal();
-          });
+    priceInput.addEventListener('input', function() {
+      calculateTotal();
+    });
 
-          
-        itemName.value = '';
-    } 
+    quantityInput.addEventListener('input', function() {
+      calculateTotal();
+    });
+
+    checkbox.addEventListener('change', function() {
+      calculateTotal();
+    });
+
+    itemName.value = '';
+  }
 }
 
     function calculateTotal() {
@@ -58,19 +62,18 @@ function clicou() {
       let checkboxes = document.querySelectorAll('.item-checkbox');
 
       for (let i = 0; i < priceInputs.length; i++) {
-        let itemPriceValue = parseFloat(priceInputs[i].value);
-        let itemQuantityValue = parseFloat(quantityInputs[i].value);
+          let itemPriceValue = parseFloat(priceInputs[i].value);
+          let itemQuantityValue = parseFloat(quantityInputs[i].value);
+          let checkbox = checkboxes[i]; // Pega o checkbox correspondente
 
-        if (!isNaN(itemPriceValue) && !isNaN(itemQuantityValue)) {
-          if (checkboxes[i].checked) {
-            totalValue += itemPriceValue * itemQuantityValue;
-          } else {
-            totalValue -= itemPriceValue * itemQuantityValue;
+          if (!isNaN(itemPriceValue) && !isNaN(itemQuantityValue)) {
+              if (checkbox && checkbox.checked) { // Verifica se o checkbox existe e está marcado
+                  totalValue += itemPriceValue * itemQuantityValue;
+              }
           }
-        }
       }
 
-      totalValue = Math.max(totalValue, 0); // Não permitir que totalValue seja menor que zero
+      totalValue = Math.max(totalValue, 0);
       totalValueInput.value = totalValue.toFixed(2);
       gastoTotal();
     }

@@ -58,12 +58,24 @@ h4 {
     opacity: 50%;
     color: white;
 }
+.item-quantity {
+    width: 65px;
+}
+li {
+    color: white;
+    text-shadow: 2px 2px 2px black;
+    font-size: 20px;
+}
+.no-list-marker {
+    list-style-type: none;
+    text-align: left;
+  }
 @media (max-width: 768px) {
     .item-price {
-      width: 10%;
+      width: 15%;
     }
     .item-quantity {
-        width: 40px;
+        width: 45px;
       }
   }
   #myCanvas {

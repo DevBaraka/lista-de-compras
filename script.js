@@ -1,7 +1,6 @@
 let totalValueInput = document.querySelector(".totalValue");
 let totalValue = 0;
 let totalGastarInput = document.querySelector('.totalGastar');
-
 let listaDeCompras = [];
 
 function clicou() {
@@ -37,56 +36,43 @@ function clicou() {
 
         priceInput.addEventListener('input', function() {
             calculateTotal();
-            salvarListaNoLocalStorage();
           });
       
           quantityInput.addEventListener('input', function() {
             calculateTotal();
-            salvarListaNoLocalStorage();
           });
       
           checkbox.addEventListener('change', function() {
             calculateTotal();
-            salvarListaNoLocalStorage();
           });
 
-          listaDeCompras.push({
-            nome: newItemText,
-            preco: 0, // Valor inicial
-            quantidade: 0, // Valor inicial
-            marcado: false // Valor inicial
-          });
-        
+          
         itemName.value = '';
     } 
 }
 
     function calculateTotal() {
-        totalValue = 0;
-        let priceInputs = document.querySelectorAll('.item-price');
-        let quantityInputs = document.querySelectorAll('.item-quantity');
-        let checkboxes = document.querySelectorAll('.item-checkbox');
+      totalValue = 0;
+      let priceInputs = document.querySelectorAll('.item-price');
+      let quantityInputs = document.querySelectorAll('.item-quantity');
+      let checkboxes = document.querySelectorAll('.item-checkbox');
 
-        for (let i = 0; i < priceInputs.length; i++) {
+      for (let i = 0; i < priceInputs.length; i++) {
         let itemPriceValue = parseFloat(priceInputs[i].value);
         let itemQuantityValue = parseFloat(quantityInputs[i].value);
-        
-        if (!isNaN(itemPriceValue) && !isNaN(itemQuantityValue)) {
-            if (checkboxes[i].checked) {
-            totalValue += itemPriceValue * itemQuantityValue;
-            }
 
-            listaDeCompras[i].preco = itemPriceValue;
-            listaDeCompras[i].quantidade = itemQuantityValue;
-            listaDeCompras[i].marcado = checkboxes[i].checked;
+        if (!isNaN(itemPriceValue) && !isNaN(itemQuantityValue)) {
+          if (checkboxes[i].checked) {
+            totalValue += itemPriceValue * itemQuantityValue;
+          } else {
+            totalValue -= itemPriceValue * itemQuantityValue;
+          }
         }
-          console.log(i);
-        
       }
-        totalValueInput.value = totalValue.toFixed(2);
-        gastoTotal();
-        salvarListaNoLocalStorage();
-    
+
+      totalValue = Math.max(totalValue, 0); // Não permitir que totalValue seja menor que zero
+      totalValueInput.value = totalValue.toFixed(2);
+      gastoTotal();
     }
     function gastoTotal() {
       let valePrice = parseFloat(totalGastarInput.value);
@@ -98,32 +84,67 @@ function clicou() {
       console.log(result);
 
       totalGastarInput.value = result;
-      salvarListaNoLocalStorage();
               
     }
 
-    function salvarListaNoLocalStorage() {
-    localStorage.setItem('listaDeCompras', JSON.stringify(listaDeCompras));
-  }
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
 
-  function carregarListaDoLocalStorage() {
-    let savedListaDeCompras = localStorage.getItem('listaDeCompras');
+    const balls = [];
+    const numBalls = 50;
 
-    if (savedListaDeCompras !== null) {
-        listaDeCompras = JSON.parse(savedListaDeCompras);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-        let priceInputs = document.querySelectorAll('.item-price');
-        let quantityInputs = document.querySelectorAll('.item-quantity');
-        let checkboxes = document.querySelectorAll('.item-checkbox');
-
-        for (let i = 0; i < listaDeCompras.length; i++) {
-            if (priceInputs[i] && quantityInputs[i] && checkboxes[i]) {
-                priceInputs[i].value = listaDeCompras[i].preco;
-                quantityInputs[i].value = listaDeCompras[i].quantidade;
-                checkboxes[i].checked = listaDeCompras[i].marcado;
-            }
-        }
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
-}
 
-    carregarListaDoLocalStorage();  
+    class Ball {
+      constructor(x, y, radius, dx) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.dx = dx;
+      }
+
+      update() {
+        this.x += this.dx;
+
+        if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+          this.dx = -this.dx;
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+
+    for (let i = 0; i < numBalls; i++) {
+      const radius = Math.random() * 20 + 10;
+      const x = Math.random() * (canvas.width - radius * 2) + radius;
+      const y = Math.random() * (canvas.height - radius * 2) + radius;
+      const dx = (Math.random() - 0.5) * 4; // Velocidade horizontal
+
+      balls.push(new Ball(x, y, radius, dx));
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (const ball of balls) {
+        ball.update();
+        ball.draw();
+      }
+
+      requestAnimationFrame(animate);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    animate();

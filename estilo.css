@@ -2,9 +2,11 @@ body {
     margin: 0;
     margin-left: 10px;
     box-sizing: border-box;
+    background-color: black;
 }
 h1 {
     text-align: center;
+    color: white;
 }
 
 .container {
@@ -49,6 +51,7 @@ h3 {
 }
 h4 {
     opacity: 50%;
+    color: white;
 }
 @media (max-width: 768px) {
     .item-price {
@@ -57,4 +60,11 @@ h4 {
     .item-quantity {
         width: 40px;
       }
+  }
+  #myCanvas {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Define a sobreposição para trás */
   }

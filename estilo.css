@@ -14,10 +14,12 @@ h1 {
     justify-content: center;
 }
 .box {
-    background-color: yellowgreen;
+    background-color: rgb(233, 44, 44);
+    border-radius: 6%;
 }
 input {
     margin: 5px;
+    border-radius: 15%;
 }
 .item-price {
     width: 60px; /* Ajuste o tamanho conforme necessário */
@@ -26,6 +28,9 @@ button {
     height: 20px;
     border-radius: 5px;
     margin-right: 5px;
+}
+button:hover {
+    transform: scale(1.05) ;
 }
 .total {
     display: flex;

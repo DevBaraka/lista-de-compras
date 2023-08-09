@@ -2,6 +2,7 @@ let totalValueInput = document.querySelector(".totalValue");
 let totalValue = 0;
 let totalGastarInput = document.querySelector('.totalGastar');
 
+let listaDeCompras = [];
 
 function clicou() {
     let itemName = document.querySelector('.item-name');
@@ -36,16 +37,26 @@ function clicou() {
 
         priceInput.addEventListener('input', function() {
             calculateTotal();
+            salvarListaNoLocalStorage();
           });
       
           quantityInput.addEventListener('input', function() {
             calculateTotal();
+            salvarListaNoLocalStorage();
           });
       
           checkbox.addEventListener('change', function() {
             calculateTotal();
+            salvarListaNoLocalStorage();
           });
 
+          listaDeCompras.push({
+            nome: newItemText,
+            preco: 0, // Valor inicial
+            quantidade: 0, // Valor inicial
+            marcado: false // Valor inicial
+          });
+        
         itemName.value = '';
     } 
 }
@@ -64,12 +75,17 @@ function clicou() {
             if (checkboxes[i].checked) {
             totalValue += itemPriceValue * itemQuantityValue;
             }
+
+            listaDeCompras[i].preco = itemPriceValue;
+            listaDeCompras[i].quantidade = itemQuantityValue;
+            listaDeCompras[i].marcado = checkboxes[i].checked;
         }
-        
+          console.log(i);
         
       }
         totalValueInput.value = totalValue.toFixed(2);
         gastoTotal();
+        salvarListaNoLocalStorage();
     
     }
     function gastoTotal() {
@@ -82,5 +98,32 @@ function clicou() {
       console.log(result);
 
       totalGastarInput.value = result;
+      salvarListaNoLocalStorage();
               
     }
+
+    function salvarListaNoLocalStorage() {
+    localStorage.setItem('listaDeCompras', JSON.stringify(listaDeCompras));
+  }
+
+  function carregarListaDoLocalStorage() {
+    let savedListaDeCompras = localStorage.getItem('listaDeCompras');
+
+    if (savedListaDeCompras !== null) {
+        listaDeCompras = JSON.parse(savedListaDeCompras);
+
+        let priceInputs = document.querySelectorAll('.item-price');
+        let quantityInputs = document.querySelectorAll('.item-quantity');
+        let checkboxes = document.querySelectorAll('.item-checkbox');
+
+        for (let i = 0; i < listaDeCompras.length; i++) {
+            if (priceInputs[i] && quantityInputs[i] && checkboxes[i]) {
+                priceInputs[i].value = listaDeCompras[i].preco;
+                quantityInputs[i].value = listaDeCompras[i].quantidade;
+                checkboxes[i].checked = listaDeCompras[i].marcado;
+            }
+        }
+    }
+}
+
+    carregarListaDoLocalStorage();  

@@ -1,3 +1,12 @@
+function showAlertWithMultipleLines() {
+  const message = "Obrigado por usar nosso APP.\n"
+                + "Deus e fiel\n"
+                + "©DevBaraka";
+  window.alert(message);
+}
+
+showAlertWithMultipleLines();
+
 let totalValueInput = document.querySelector(".totalValue");
 let totalValue = 0;
 let totalGastarInput = document.querySelector('.totalGastar');
@@ -16,7 +25,7 @@ function clicou() {
     let checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.className = 'item-checkbox';
-    
+
     let itemNameSpan = document.createElement('span');
     itemNameSpan.textContent = newItemText;
     itemNameSpan.classList.add('no-text-decoration');
@@ -63,7 +72,7 @@ function clicou() {
 
       for (let i = 0; i < priceInputs.length; i++) {
           let itemPriceValue = parseFloat(priceInputs[i].value);
-          let itemQuantityValue = parseFloat(quantityInputs[i].value);
+          let itemQuantityValue = parseInt(quantityInputs[i].value);
           let checkbox = checkboxes[i]; // Pega o checkbox correspondente
 
           if (!isNaN(itemPriceValue) && !isNaN(itemQuantityValue)) {

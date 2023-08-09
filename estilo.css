@@ -17,6 +17,11 @@ h1 {
     background-color: rgb(233, 44, 44);
     border-radius: 6%;
 }
+.box-topo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 input {
     margin: 5px;
     border-radius: 15%;
@@ -61,6 +66,11 @@ h4 {
 .item-quantity {
     width: 65px;
 }
+.item-List {
+    padding: 0;
+    margin-left: 0;
+    list-style-type: none;
+  }
 li {
     color: white;
     text-shadow: 2px 2px 2px black;

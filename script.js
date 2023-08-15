@@ -1,11 +1,4 @@
-function showAlertWithMultipleLines() {
-  const message = "Obrigado por usar nosso APP.\n"
-                + "Deus e fiel\n"
-                + "©DevBaraka";
-  window.alert(message);
-}
-
-showAlertWithMultipleLines();
+window.addEventListener('load', carregarDoLocalStorage);
 
 let totalValueInput = document.querySelector(".totalValue");
 let totalValue = 0;
@@ -41,10 +34,36 @@ function clicou() {
     quantityInput.placeholder = 'Und';
     quantityInput.size = 2;
 
+    let trash = document.createElement('img');
+    trash.className = 'item-trash';
+    trash.src = "trash.png";
+    
+    trash.addEventListener('click', function() {
+      let listItem = this.closest('li'); // Encontra o elemento <li> pai do "trash"
+      if (listItem) {
+          listItem.remove(); // Remove o elemento <li> da lista
+          calculateTotal(); // Recalcula o total após a remoção
+      }
+    });
+
+    const newItemData = {
+      name: newItemText,
+      price: "",
+      quantity: "",
+      checked: false,
+      };
+      listaDeCompras.push(newItemData);
+
+      salvarNoLocalStorage();
+
+      itemName.value = '';
+    
+
     newItem.appendChild(checkbox);
     newItem.appendChild(itemNameSpan);
     newItem.appendChild(priceInput);
     newItem.appendChild(quantityInput);
+    newItem.appendChild(trash);
 
     itemList.appendChild(newItem);
 
@@ -80,83 +99,110 @@ function clicou() {
                   totalValue += itemPriceValue * itemQuantityValue;
               }
           }
+          
       }
 
       totalValue = Math.max(totalValue, 0);
       totalValueInput.value = totalValue.toFixed(2);
+
       gastoTotal();
+
+      salvarNoLocalStorage();
     }
     function gastoTotal() {
       let valePrice = parseFloat(totalGastarInput.value);
       let result = valePrice - totalValue;
       
-      // Define um valor mínimo de 0 para o resultado
       result = Math.max(result, 0);
       
       console.log(result);
 
       totalGastarInput.value = result;
               
+      salvarNoLocalStorage();
     }
+    
+    function salvarNoLocalStorage() {
+      const dataToSave = {
+          totalValue: totalValue,
+          totalGastarInput: totalGastarInput.value,
+          listaDeCompras: listaDeCompras,
+      };
+  
+      localStorage.setItem('dadosDeCompras', JSON.stringify(dataToSave));
+     }
 
-    const canvas = document.getElementById("myCanvas");
-    const ctx = canvas.getContext("2d");
+    function carregarDoLocalStorage() {
+      const dadosSalvos = localStorage.getItem('dadosDeCompras');
+  
+      if (dadosSalvos) {
+        const dadosParseados = JSON.parse(dadosSalvos);
 
-    const balls = [];
-    const numBalls = 50;
+        totalValue = dadosParseados.totalValue || 0;
+        totalValueInput.value = totalValue.toFixed(2);
+        totalGastarInput.value = dadosParseados.totalGastarInput || 0;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        const itemList = document.querySelector('.item-List');
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
+        for (const itemData of dadosParseados.listaDeCompras) {
+            const newItem = document.createElement('li');
+            newItem.classList.add('no-list-marker');
 
-    class Ball {
-      constructor(x, y, radius, dx) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.dx = dx;
-      }
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'item-checkbox';
+            checkbox.checked = itemData.checked;
 
-      update() {
-        this.x += this.dx;
+            const itemNameSpan = document.createElement('span');
+            itemNameSpan.textContent = itemData.name;
+            itemNameSpan.classList.add('no-text-decoration');
 
-        if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
-          this.dx = -this.dx;
+            const priceInput = document.createElement('input');
+            priceInput.type = 'number';
+            priceInput.className = 'item-price';
+            priceInput.placeholder = 'Preço';
+            priceInput.value = itemData.price;
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.className = 'item-quantity';
+            quantityInput.placeholder = 'Und';
+            quantityInput.size = 2;
+            quantityInput.value = itemData.quantity;
+
+            const trash = document.createElement('img');
+            trash.className = 'item-trash';
+            trash.src = 'trash.png';
+
+            trash.addEventListener('click', function() {
+                let listItem = this.closest('li');
+                if (listItem) {
+                    listItem.remove();
+                    calculateTotal();
+                }
+            });
+
+            newItem.appendChild(checkbox);
+            newItem.appendChild(itemNameSpan);
+            newItem.appendChild(priceInput);
+            newItem.appendChild(quantityInput);
+            newItem.appendChild(trash);
+
+            itemList.appendChild(newItem);
+
+            priceInput.addEventListener('input', function() {
+                calculateTotal();
+            });
+
+            quantityInput.addEventListener('input', function() {
+                calculateTotal();
+            });
+
+            checkbox.addEventListener('change', function() {
+                calculateTotal();
+            });
         }
-      }
-
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
-        ctx.fill();
-        ctx.closePath();
-      }
     }
+  }
 
-    for (let i = 0; i < numBalls; i++) {
-      const radius = Math.random() * 20 + 10;
-      const x = Math.random() * (canvas.width - radius * 2) + radius;
-      const y = Math.random() * (canvas.height - radius * 2) + radius;
-      const dx = (Math.random() - 0.5) * 4; // Velocidade horizontal
-
-      balls.push(new Ball(x, y, radius, dx));
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      for (const ball of balls) {
-        ball.update();
-        ball.draw();
-      }
-
-      requestAnimationFrame(animate);
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-    animate();
+  

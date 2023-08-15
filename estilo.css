@@ -63,7 +63,11 @@ h3 {
     text-align: center;
 }
 h4 {
-    color: black;
+    color: white;
+    background-color: black;
+    opacity: 0.85;
+    width: 180px;
+    text-align: center;
 }
 .item-quantity {
     width: 65px;

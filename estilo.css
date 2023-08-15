@@ -9,6 +9,7 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 10px;
+    margin-right: 10px;
 }
 .box {
     background-color: black;
